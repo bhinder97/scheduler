@@ -23,10 +23,10 @@ export const getAppointmentsForDay = (state, day) => {
 //   return Object.values(dailyInterviewers);
 // }
 
-// export const getInterview = (state, interview) => {
-//   if (interview === null) {
-//     return null;
-//   }
+export const getInterview = (state, interview) => {
+  if (interview === null) {
+    return null;
+  }
 
-//   return { ...interview, interviewer: state.interviewers[interview.interviewer] }
-// }
+  return { ...interview, interviewer: state.interviewers[interview.interviewer] }
+}
