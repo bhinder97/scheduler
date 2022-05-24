@@ -4,23 +4,16 @@ export const getAppointmentsForDay = (state, day) => {
   if (!theDay) {
     return [];
   }
-
-  return theDay.appointments
-    .map(appt => state.appointments[appt]);
+  return theDay.appointments.map(appt => state.appointments[appt]);
 }
 
 export const getInterviewersForDay = (state, day) => {
-  const { interviewers } = state
-  const dailyInterviewers = {};
+  const theDay = state.days.find(date => date.name === day);
 
-  getAppointmentsForDay(state, day)
-    .filter(appt => appt.interview)
-    .map(appt => appt.interview.interviewer)
-    .forEach(interviewer => {
-      dailyInterviewers[interviewer] = interviewers[interviewer]
-    });
-
-  return Object.values(dailyInterviewers);
+  if (!theDay) {
+    return [];
+  }
+  return theDay.interviewers.map(id => state.interviewers[id]);
 }
 
 export const getInterview = (state, interview) => {
