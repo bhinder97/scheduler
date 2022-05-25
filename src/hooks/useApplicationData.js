@@ -2,10 +2,10 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Appointment from "components/Appointment";
 import DayList from "components/DayList";
-import { getAppointmentsForDay, getInterview, getInterviewersForDay } from "helpers/selectors";
+import { getAppointmentsForDay, getInterview, getInterviewersForDay, updateSpots } from "helpers/selectors";
 
 
-export default function useApplicationData(initial) {
+export default function useApplicationData() {
   const [state, setState] = useState({
     day: "Monday",
     days: [],
@@ -13,7 +13,8 @@ export default function useApplicationData(initial) {
     interviewers: {}
   })
 
-  const dailyAppointments = getAppointmentsForDay(state, state.day);
+  console.log("STATE:", state)
+  // const dailyAppts = getAppointmentsForDay(state, state.day);
   const setDay = day => setState(prev => ({ ...prev, day }));
   const appointments = getAppointmentsForDay(state, state.day);
 
@@ -27,10 +28,7 @@ export default function useApplicationData(initial) {
       [id]: appointment
     };
     return axios.put(`/api/appointments/${id}`, appointment).then(() => {
-      setState({
-        ...state,
-        appointments
-      });
+      setState({ ...state, appointments});
     })
   }
 
@@ -51,6 +49,7 @@ export default function useApplicationData(initial) {
       });
     })
   }
+
   const genDayList = () => {
     return <DayList
       {... {
@@ -59,8 +58,6 @@ export default function useApplicationData(initial) {
       onChange: setDay
       }} />
   }
-
-
   const schedule = appointments.map((appointment) => {
     const interview = getInterview(state, appointment.interview);
     return (
@@ -85,6 +82,7 @@ export default function useApplicationData(initial) {
       setState(prev => ({ ...prev, days: all[0].data, appointments: all[1].data, interviewers: all[2].data }))
     })
   }, [])
+  
 
   return { schedule, genDayList}
 }
