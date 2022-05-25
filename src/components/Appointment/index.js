@@ -7,6 +7,7 @@ import useVisualMode from "hooks/useVisualMode";
 import Form from "./Form";
 import Status from "./Status";
 import Confirm from "./Confirm";
+import Error from "./Error";
 
 const EMPTY = "EMPTY";
 const SHOW = "SHOW";
@@ -15,6 +16,8 @@ const SAVING = "SAVING";
 const DELETING = "DELETING";
 const CONFIRM = "CONFIRM";
 const EDIT = "EDIT";
+const ERROR_SAVE = "ERROR_SAVE";
+const ERROR_DELETE = "ERROR _ DELETE";
 
 export default function Appointment({ interview, time, interviewers, bookInterview, id, cancelInterview }) {
   const { mode, transition, back } = useVisualMode(interview ? SHOW : EMPTY)
@@ -26,17 +29,16 @@ export default function Appointment({ interview, time, interviewers, bookIntervi
       interviewer
     }
     transition(SAVING);
-    bookInterview(id, interview).then(() => {
-      transition(SHOW)
-    })
+    bookInterview(id, interview)
+    .then(() => {transition(SHOW)})
+    .catch(() => {transition(ERROR_SAVE, true)});
   }
 
   const deleteInterview = () => {
-    transition(DELETING);
+    transition(DELETING, true);
     cancelInterview(id)
-    .then(() => {
-      transition(EMPTY)
-    });
+    .then(() => {transition(EMPTY)})
+    .catch(() => {transition(ERROR_DELETE, true)});
   }
 
   const edit = () => {
@@ -53,6 +55,8 @@ export default function Appointment({ interview, time, interviewers, bookIntervi
       {mode === SAVING && <Status message={"Saving..."} />}
       {mode === DELETING && <Status message={"Deleting ..."} /> }
       {mode === CONFIRM && <Confirm message={"Are you sure you would like to delete?"} onCancel={back} onConfirm={deleteInterview} />}
+      {mode === ERROR_SAVE && <Error message={"Error attempting to save"} onClose={back} /> }
+      {mode === ERROR_DELETE && <Error message={"Error attempting to delete"} onClose={back} />}
     </article>
   )
 }
