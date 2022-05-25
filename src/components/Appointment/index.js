@@ -17,28 +17,29 @@ const DELETING = "DELETING";
 const CONFIRM = "CONFIRM";
 const EDIT = "EDIT";
 const ERROR_SAVE = "ERROR_SAVE";
-const ERROR_DELETE = "ERROR _ DELETE";
+const ERROR_DELETE = "ERROR_DELETE";
 
 export default function Appointment({ interview, time, interviewers, bookInterview, id, cancelInterview }) {
   const { mode, transition, back } = useVisualMode(interview ? SHOW : EMPTY)
   
   function save(name, interviewer) {
-    console.log(name, interviewer)
     const interview = {
       student: name,
       interviewer
     }
     transition(SAVING);
     bookInterview(id, interview)
-    .then(() => {transition(SHOW)})
+    .then(() => {transition(SHOW, true)})
     .catch(() => {transition(ERROR_SAVE, true)});
   }
 
   const deleteInterview = () => {
     transition(DELETING, true);
     cancelInterview(id)
-    .then(() => {transition(EMPTY)})
-    .catch(() => {transition(ERROR_DELETE, true)});
+    .then(() => transition(EMPTY, true))
+    .catch(err => {
+      transition(ERROR_DELETE, true)
+      console.log(err)});
   }
 
   const edit = () => {

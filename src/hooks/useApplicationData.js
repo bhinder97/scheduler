@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Appointment from "components/Appointment";
 import DayList from "components/DayList";
-import { getAppointmentsForDay, getInterview, getInterviewersForDay, updateSpots } from "helpers/selectors";
+import { getAppointmentsForDay, getInterview, getInterviewersForDay } from "helpers/selectors";
 
 
 export default function useApplicationData() {
@@ -13,8 +13,26 @@ export default function useApplicationData() {
     interviewers: {}
   })
 
-  console.log("STATE:", state)
-  // const dailyAppts = getAppointmentsForDay(state, state.day);
+
+  const updateSpots = function(state, appointments) {
+    const id = state.days.findIndex(day => day.name === state.day);
+    const getDay = state.days[id];
+    let spots = 0;
+    
+    console.log("GETDAY", state.appointments)
+    for (const day of getDay.appointments) {
+      if (state.appointments[day].interview === null) {
+        spots++
+      }
+    }
+    console.log("DAYS REMAINING", spots)
+    const updatedDay = {...getDay, spots: spots}
+    const updatedDays = [...state.days]
+    updatedDays[id] = updatedDay;
+
+    return updatedDays;
+  }
+
   const setDay = day => setState(prev => ({ ...prev, day }));
   const appointments = getAppointmentsForDay(state, state.day);
 
@@ -27,8 +45,12 @@ export default function useApplicationData() {
       ...state.appointments,
       [id]: appointment
     };
-    return axios.put(`/api/appointments/${id}`, appointment).then(() => {
-      setState({ ...state, appointments});
+    return axios.put(`/api/appointments/${id}`, appointment)
+    .then(() => {
+      setState(prev => ({ ...prev, appointments}))
+      const days = updateSpots(state, appointments)
+      setState(prev => ({ ...prev, days}))
+      console.log(state)
     })
   }
 
@@ -43,20 +65,17 @@ export default function useApplicationData() {
     };
     return axios.delete(`/api/appointments/${id}`, appointment)
     .then(() => {
-      setState({
-        ...state,
-        appointments
-      });
+      setState(prev => ({...prev, appointments}))
+      const days = updateSpots(state, appointments)
+      setState(prev => ({...prev, days}))
     })
   }
 
   const genDayList = () => {
     return <DayList
-      {... {
-      days: state.days,
-      value: state.day,
-      onChange: setDay
-      }} />
+      days={state.days}
+      value={state.day}
+      onChange={setDay}/>
   }
   const schedule = appointments.map((appointment) => {
     const interview = getInterview(state, appointment.interview);
