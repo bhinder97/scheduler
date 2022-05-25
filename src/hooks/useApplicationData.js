@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Appointment from "components/Appointment";
 import DayList from "components/DayList";
-import { getAppointmentsForDay, getInterview, getInterviewersForDay } from "helpers/selectors";
+import { getAppointmentsForDay, getInterview, getInterviewersForDay, updateSpots } from "helpers/selectors";
 
 
 export default function useApplicationData() {
@@ -13,31 +13,6 @@ export default function useApplicationData() {
     interviewers: {}
   })
 
-  const countSpots = (state) => {
-    console.log("THIS IS", state)
-    const currentDay = state.days.find((day) => day.name === state.day) || [];
-    const appointmentIds = currentDay.appointments || [];
-  
-    const spots = appointmentIds.filter((id) => !state.appointments[id].interview).length;
-  
-    return spots;
-  };
-  
-  const updateSpots = (state) => {
-    const updatedState = { ...state };
-    const updatedDays = [...state.days];
-    const updatedDay = { ...state.days.find((day) => day.name === state.day) };
-  
-    const spots = countSpots(state);
-    updatedDay.spots = spots;
-  
-    const updatedDayIndex = state.days.findIndex((day) => day.name === state.day);
-    updatedDays[updatedDayIndex] = updatedDay;
-  
-    updatedState.days = updatedDays;
-  
-    return updatedState;
-  };
 
   const setDay = day => setState(prev => ({ ...prev, day }));
   const appointments = getAppointmentsForDay(state, state.day);
