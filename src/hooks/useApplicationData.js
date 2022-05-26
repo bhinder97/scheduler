@@ -17,6 +17,7 @@ export default function useApplicationData() {
   const setDay = day => setState(prev => ({ ...prev, day }));
   const appointments = getAppointmentsForDay(state, state.day);
 
+  //used to book an interview
   function bookInterview(id, interview) {
     const appointment = {
       ...state.appointments[id],
@@ -32,6 +33,7 @@ export default function useApplicationData() {
     })
   }
 
+  //used to cancel an interview
   function cancelInterview(id, interview) {
     const appointment = {
       ...state.appointments[id],
@@ -47,12 +49,15 @@ export default function useApplicationData() {
     })
   }
 
+  //used to generate a day list to be shown
   const genDayList = () => {
     return <DayList
       days={state.days}
       value={state.day}
       onChange={setDay}/>
   }
+
+  //used to generate the schedule to be shown
   const schedule = appointments.map((appointment) => {
     const interview = getInterview(state, appointment.interview);
     return (

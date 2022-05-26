@@ -9,6 +9,7 @@ import Status from "./Status";
 import Confirm from "./Confirm";
 import Error from "./Error";
 
+//all modes being used
 const EMPTY = "EMPTY";
 const SHOW = "SHOW";
 const CREATE = "CREATE";
@@ -22,6 +23,7 @@ const ERROR_DELETE = "ERROR_DELETE";
 export default function Appointment({ interview, time, interviewers, bookInterview, id, cancelInterview }) {
   const { mode, transition, back } = useVisualMode(interview ? SHOW : EMPTY)
   
+  //save function
   function save(name, interviewer) {
     const interview = {
       student: name,
@@ -33,6 +35,7 @@ export default function Appointment({ interview, time, interviewers, bookIntervi
     .catch(() => {transition(ERROR_SAVE, true)});
   }
 
+  //function used to delete the interview
   const deleteInterview = () => {
     transition(DELETING, true);
     cancelInterview(id)
@@ -42,10 +45,12 @@ export default function Appointment({ interview, time, interviewers, bookIntervi
       console.log(err)});
   }
 
+  //function used to edit
   const edit = () => {
     transition(EDIT)
   }
 
+  //all the states and modes being called and used depending on whether you want to save delete etc
   return (
     <article className="appointment">
       <Header time={time} />

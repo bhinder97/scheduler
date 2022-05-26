@@ -21,6 +21,7 @@ export default function Form(props) {
     props.onCancel()
   }
 
+  // validation to make sure there is a name and interviewer selected
   const validate = () => {
     if (!student) {
       setError("Please enter a name.");

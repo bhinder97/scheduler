@@ -1,3 +1,5 @@
+
+//used to get appointments for that specific day
 export const getAppointmentsForDay = (state, day) => {
   const theDay = state.days.find(date => date.name === day);
 
@@ -7,6 +9,7 @@ export const getAppointmentsForDay = (state, day) => {
   return theDay.appointments.map(appt => state.appointments[appt]);
 }
 
+//used to get interviewers
 export const getInterviewersForDay = (state, day) => {
   const theDay = state.days.find(date => date.name === day);
 
@@ -16,6 +19,7 @@ export const getInterviewersForDay = (state, day) => {
   return theDay.interviewers.map(id => state.interviewers[id]);
 }
 
+//used to get the interview to be shown later
 export const getInterview = (state, interview) => {
   if (interview === null) {
     return null;
@@ -24,17 +28,18 @@ export const getInterview = (state, interview) => {
   return { ...interview, interviewer: state.interviewers[interview.interviewer] }
 }
 
+// function to count spots, then use that information to update spots
 const countSpots = (state) => {
   const currentDay = state.days.find((day) => day.name === state.day) || [];
-  const appointmentIds = currentDay.appointments || [];
+  const apptId = currentDay.appointments || [];
 
-  const spots = appointmentIds.filter((id) => !state.appointments[id].interview).length;
+  const spots = apptId.filter((id) => !state.appointments[id].interview).length;
 
   return spots;
 };
 
 export const updateSpots = (state) => {
-  const updatedState = { ...state };
+  const newCount = { ...state };
   const updatedDays = [...state.days];
   const updatedDay = { ...state.days.find((day) => day.name === state.day) };
 
@@ -44,7 +49,7 @@ export const updateSpots = (state) => {
   const updatedDayIndex = state.days.findIndex((day) => day.name === state.day);
   updatedDays[updatedDayIndex] = updatedDay;
 
-  updatedState.days = updatedDays;
+  newCount.days = updatedDays;
 
-  return updatedState;
+  return newCount;
 };
