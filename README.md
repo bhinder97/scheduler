@@ -43,8 +43,8 @@ npm run storybook
 ```
 ## Screenshots
 
-!["Screenshot of Monday selected"](https://github.com/bhinder97/scheduler/blob/master/docs/Monday%20selected.png)
-!["Screenshot of Tuesday selected"](https://github.com/bhinder97/scheduler/blob/master/docs/Tuesday%20selected.png)
-!["Screenshot of error"](https://github.com/bhinder97/scheduler/blob/master/docs/Error.png)
-!["Screenshot of new name added"](https://github.com/bhinder97/scheduler/blob/master/docs/New%20name%20added.png)
-!["Screenshot of deletion confirmation"](https://github.com/bhinder97/scheduler/blob/master/docs/Delete%20confirmation.png)
+!["Screenshot of Monday selected"](https://github.com/bhinder97/scheduler/blob/master/docs/Monday%20selected.png?raw=true)
+!["Screenshot of Tuesday selected"](https://github.com/bhinder97/scheduler/blob/master/docs/Tuesday%20selected.png?raw=true)
+!["Screenshot of error"](https://github.com/bhinder97/scheduler/blob/master/docs/Error.png?raw=true)
+!["Screenshot of new name added"](https://github.com/bhinder97/scheduler/blob/master/docs/New%20name%20added.png?raw=true)
+!["Screenshot of deletion confirmation"](https://github.com/bhinder97/scheduler/blob/master/docs/Delete%20confirmation.png?raw=true)
